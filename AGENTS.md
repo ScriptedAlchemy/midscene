@@ -59,3 +59,23 @@ should point here instead of duplicating rules.
   `npx nx build <project>`.
 - Cross-package runtime or build-system change: run `pnpm run lint` and say
   explicitly if broader validation is still outstanding.
+
+## Cursor Cloud specific instructions
+
+- After `pnpm install`, all packages are already built (the `prepare` script
+  runs `pnpm run build` automatically). You do not need a separate build step
+  before running tests or dev servers.
+- Docs site: `cd apps/site && pnpm run dev` starts the Rspress dev server on
+  port 3000. Other app dev servers (playground, report, chrome-extension) are
+  documented in `CONTRIBUTING.md` under "Development Workflows".
+- Unit tests: `pnpm run test` runs non-AI tests across 12 projects. All tests
+  use Vitest and complete in ~80 s.
+- AI-dependent tests (`pnpm run test:ai`, `pnpm run e2e`) require a `.env`
+  file at the repo root with `OPENAI_API_KEY` and optionally
+  `MIDSCENE_MODEL_NAME`. These will be skipped/fail without the key.
+- Lint: `pnpm run lint` uses Biome and auto-fixes; safe to run at any time.
+- The Nx project name for `apps/site` is `doc`, not `site`.
+  Use `npx nx build doc` / `npx nx test doc` when targeting the docs site.
+- If report UI changes appear stale or you see
+  `REPLACE_ME_WITH_REPORT_HTML`, run `pnpm run build:skip-cache` to rebuild
+  everything without Nx cache.
